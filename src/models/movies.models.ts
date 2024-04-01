@@ -1,27 +1,26 @@
 import { Schema, model } from "mongoose";
 
 interface IMovieSchema {
-    name: String,
-    image: String
+    name: string,
+    image: string,
+    createdAt?: Date,
+    updateAt?: Date
 }
 
 
-const userSchema = new Schema<IMovieSchema> ({
+const movieSchema = new Schema<IMovieSchema> ({
     name: {
         type: String,
         required: true
     },
-    email: {
-        type: String,
-        unique: true
-    },
-    password: {
+    image: {
         type: String,
         required: true
     },
+  
 }, {timestamps: true});
 
 
-const UserModel = model<IMovieSchema>("User", userSchema)
+const MovieModel = model<IMovieSchema>("Movie", movieSchema)
 
-export default UserModel;
+export default MovieModel;
