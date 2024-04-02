@@ -4,7 +4,7 @@ interface IUserSchema {
     name: string,
     email: string,
     password: string,
-    movies: [],
+    movies:[],
     createdAt?: Date,
     updateAt?: Date
 }

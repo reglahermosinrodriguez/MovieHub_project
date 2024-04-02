@@ -1,9 +1,7 @@
 import { Schema, model } from "mongoose";
 
 interface IGenreSchema {
-    name: string,    
-    createdAt?: Date,
-    updateAt?: Date
+    name: string,   
 }
 
 const genreSchema = new Schema<IGenreSchema> ({
@@ -12,8 +10,8 @@ const genreSchema = new Schema<IGenreSchema> ({
         required: true
     },
   
-}, {timestamps: true});
-
+}
+)
 
 const GenreModel = model<IGenreSchema>("Genre", genreSchema)
 

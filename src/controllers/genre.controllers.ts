@@ -15,9 +15,11 @@ export const getAllGenres = async (req: Request, res: Response) => {
 
 export const createGenre = async (req: Request, res: Response) => {
     const {name} = req.body
+    const {movieId} = req.params
     
     try {
          const newGenre = await GenreModel.create({name})
+         await MovieModel.findByIdAndUpdate({_id: movieId}, { $push: {genre: newGenre._id}})
          res.status(201).send(newGenre)
     } catch (error) {
          res.status(400).send(error)
@@ -25,16 +27,16 @@ export const createGenre = async (req: Request, res: Response) => {
     }
  }
 
- export const updateMovie = async (req: Request, res: Response) => {
-    const {name, image, score} = req.body
-    const {movieId} = req.params
+ export const updateGenre = async (req: Request, res: Response) => {
+    const {name} = req.body
+    const {genreId} = req.params
     try {
-        const movieUpdated = await MovieModel.findByIdAndUpdate(
-            {_id:movieId},
-            {name, image, score},
+        const genreUpdated = await GenreModel.findByIdAndUpdate(
+            {_id:genreId},
+            {name},
             {new: true}
         )
-        res.status(201).send(movieUpdated)
+        res.status(201).send(genreUpdated)
     } catch (error) {
         res.status(400).send(error)
         
@@ -42,13 +44,13 @@ export const createGenre = async (req: Request, res: Response) => {
     }
 }
 
-export const deleteMovie = async (req: Request, res: Response) => {
-    const {movieId} = req.params
+export const deleteGenre = async (req: Request, res: Response) => {
+    const {genreId} = req.params
     try {
-        const movieDeleted = await MovieModel.findByIdAndDelete(
-            {_id:movieId}
+        const genreDeleted = await GenreModel.findByIdAndDelete(
+            {_id:genreId}
         )
-        res.status(201).send(movieDeleted)
+        res.status(201).send(genreDeleted)
     } catch (error) {
         res.status(400).send(error)
     }
