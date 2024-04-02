@@ -3,6 +3,8 @@ import { Schema, model } from "mongoose";
 interface IMovieSchema {
     name: string,
     image: string,
+    score: number,
+    genre: string[]
     createdAt?: Date,
     updateAt?: Date
 }
@@ -17,6 +19,14 @@ const movieSchema = new Schema<IMovieSchema> ({
         type: String,
         required: true
     },
+    score: {
+        type: Number,
+        required: true
+    },
+    genre: [{
+        type: Schema.Types.ObjectId, ref:"Genre",
+        required: true
+    }]
   
 }, {timestamps: true});
 

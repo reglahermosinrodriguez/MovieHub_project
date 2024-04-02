@@ -1,30 +1,31 @@
-import {Request, Response} from "express"
+import { Request, Response } from "express"
+import GenreModel from "../models/genre.models"
 import MovieModel from "../models/movies.models"
-import UserModel from "../models/users.models"
 
-export const getAllMovies = async (req: Request, res: Response) => {
+
+export const getAllGenres = async (req: Request, res: Response) => {
     try {
-        const allMovies = await MovieModel.find().populate("genre")
-        res.status(201).send(allMovies)
+        const allGenres = await GenreModel.find()
+        res.status(201).send(allGenres)
     } catch (error) {
         res.status(400).send(error)
     }
 }
 
-export const createMovie = async (req: Request, res: Response) => {
-   const {name, image, score} = req.body
-   const {userId} = req.params
-   try {
-        const newMovie = await MovieModel.create({name, image, score})
-        await UserModel.findByIdAndUpdate({_id: userId}, { $push: {movies: newMovie._id}})
-        res.status(201).send(newMovie)
-   } catch (error) {
-        res.status(400).send(error)
-    
-   }
-}
 
-export const updateMovie = async (req: Request, res: Response) => {
+export const createGenre = async (req: Request, res: Response) => {
+    const {name} = req.body
+    
+    try {
+         const newGenre = await GenreModel.create({name})
+         res.status(201).send(newGenre)
+    } catch (error) {
+         res.status(400).send(error)
+     
+    }
+ }
+
+ export const updateMovie = async (req: Request, res: Response) => {
     const {name, image, score} = req.body
     const {movieId} = req.params
     try {
