@@ -1,10 +1,14 @@
 import {Request, Response} from "express"
-import UserModel from "../models/users.models"
+import prisma from "../db/client";
 
-export const getAllUsers = async (req: Request, res: Response) => {
+export const getAllUsers = async(req: Request, res: Response) => {
     try {
-        const allUsers = await UserModel.find().populate("movies")
-        res.status(200).send(allUsers)
+        const allUsers = await prisma.user.findMany({
+            include: {
+                movies:true
+            }
+        })
+            res.status(200).send(allUsers)
     } catch (error) {
         res.status(400).send(error)
     }
@@ -13,38 +17,37 @@ export const getAllUsers = async (req: Request, res: Response) => {
 export const createUser = async (req: Request, res: Response) => {
     const {name, email, password} = req.body
     try {
-        const newUser = await UserModel.create({name, email, password})
-        res.status(201).send(newUser)
+        const newUser = await prisma.user.create({
+            data:{name, email, password}
+        });
+            res.status(201).send(newUser)
     } catch (error) {
-        res.status(400).send(error)        
+        res.status(400).send(error)
     }
 }
 
 export const updateUser = async (req: Request, res: Response) => {
-    const {name, email, password} = req.body
+    const {name, email, password} =  req.body
     const {userId} = req.params
     try {
-        const userUpdated = await UserModel.findByIdAndUpdate(
-            {_id:userId},
-            {name, email, password},
-            {new: true}
-        )
+        const userUpdated = await prisma.user.update({
+            where: {id:userId},
+            data: {name, email, password}
+            })
         res.status(201).send(userUpdated)
     } catch (error) {
         res.status(400).send(error)
-        
-        
     }
 }
 
 export const deleteUser = async (req: Request, res: Response) => {
     const {userId} = req.params
     try {
-        const userDeleted = await UserModel.findByIdAndDelete(
-            {_id:userId}
-        )
+        const userDeleted = await prisma.user.delete({
+            where: {id:userId}})
         res.status(201).send(userDeleted)
     } catch (error) {
         res.status(400).send(error)
     }
+
 }
