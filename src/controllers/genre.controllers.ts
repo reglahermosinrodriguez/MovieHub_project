@@ -4,7 +4,11 @@ import prisma from "../db/client";
 
 export const getAllGenres = async (req: Request, res: Response) => {
     try {
-        const allGenres= await prisma.genres.findMany()
+        const allGenres= await prisma.genres.findMany({
+            include: {
+                movie: true
+            }
+        })
         res.status(201).send(allGenres)
     } catch (error) {
         res.status(400).send(error)

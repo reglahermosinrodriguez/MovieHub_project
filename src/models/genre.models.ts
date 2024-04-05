@@ -1,7 +1,7 @@
 import { Schema, model } from "mongoose";
 
 interface IGenreSchema {
-    name: string,   
+    name: string,
 }
 
 const genreSchema = new Schema<IGenreSchema> ({
