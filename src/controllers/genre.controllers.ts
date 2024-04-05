@@ -17,7 +17,7 @@ export const getAllGenres = async (req: Request, res: Response) => {
 
 export const createGenre = async (req: Request, res: Response) => {
    const {name} = req.body
-   const {movieId} = req.params
+   const movieId = parseInt(req.params.movieId)
    try {
         const genre = await prisma.genres.create({
             data: {name, movie: {connect: {id:movieId}}}
@@ -31,7 +31,7 @@ export const createGenre = async (req: Request, res: Response) => {
 
 export const updateGenre = async (req: Request, res: Response) => {
     const {name} =  req.body
-    const {genreId} = req.params
+    const genreId = parseInt(req.params.genreId)
     try {
         const genreUpdated = await prisma.genres.update({
             where: {id: genreId},
