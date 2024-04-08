@@ -3,7 +3,7 @@ import { createGenre, deleteGenre, getAllGenres, updateGenre } from "../controll
 
 const genreRouter = Router()
 genreRouter.get("/", getAllGenres)
-genreRouter.post("/:movieId", createGenre)
+genreRouter.post("/", createGenre)
 genreRouter.patch("/:movieId", updateGenre )
 genreRouter.delete("/:genreId", deleteGenre)
 
