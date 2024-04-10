@@ -13,7 +13,7 @@ export const getAllMovies = async (req: Request, res: Response) => {
 
         res.status(200).send({
             type: "array",
-            msn: "All movies",
+            msg: "All movies",
             data: allMovies
         })
 
@@ -127,24 +127,6 @@ export const updateMovie = async (req: Request, res: Response) => {
         res.status(500).send({ message: "Hubo un error al actualizar la película", error });
     }
 }
-
-
-// export const updateMovie = async (req: Request, res: Response) => {
-//     const {name, image, score} =  req.body
-//     const movieId = parseInt(req.params.movieId)
-//     try {
-//         const movieUpdated = await prisma.movies.update({
-//             where: {id: movieId},
-//             data: {name, image, score},
-//             include: {
-//                 genre: true
-//             }
-//         })
-//         res.status(201).send(movieUpdated)
-//     } catch (error) {
-//         res.status(400).send(error)
-//     }
-// }
 
 export const deleteMovie = async (req: Request, res: Response) => {
     const movieId = parseInt(req.params.movieId)

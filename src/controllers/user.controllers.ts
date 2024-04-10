@@ -6,6 +6,7 @@ export const getAllUsers = async(req: Request, res: Response) => {
         const allUsers = await prisma.user.findMany({
             include: {
                 movies:true
+               
             }
         })
             res.status(200).send(allUsers)
