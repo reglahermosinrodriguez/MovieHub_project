@@ -6,7 +6,11 @@ export const getAllMovies = async (req: Request, res: Response) => {
     try {
         const allMovies = await prisma.movies.findMany({
             include: {
-                genre: true
+                genre: {
+                    select: {
+                        genre: true
+                    }
+                }
             }
         })
         

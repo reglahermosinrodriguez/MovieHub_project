@@ -5,8 +5,15 @@ export const getAllUsers = async(req: Request, res: Response) => {
     try {
         const allUsers = await prisma.user.findMany({
             include: {
-                movies:true
-               
+                movies: {
+                    include: {
+                        genre: {
+                            select: {
+                                genre: true
+                            }
+                        }
+                    }
+                }
             }
         })
             res.status(200).send(allUsers)
