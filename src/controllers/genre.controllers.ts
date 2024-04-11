@@ -32,28 +32,23 @@ export const createGenres = async (req: Request, res: Response) => {
         return res.status(400).send({ message: "The field name is required" });
     }
     try {
-        // Verificar si ya existe un género con el mismo nombre
         const existingGenre = await prisma.genres.findFirst({
             where: { name: name }
         });
         if (existingGenre) {
-            // Si ya existe, devolver un mensaje de error
             return res.status(400).send({ message: "The genre already exists" });
         }
 
-        // Si no existe, crear el nuevo género
         const newGenre = await prisma.genres.create({
             data: { name }
         });
 
-        // Enviar respuesta con el nuevo género creado
         res.status(201).send({
             type: typeof newGenre,
             msg: "Genre created successfully",
             data: newGenre,
         });
     } catch (error) {
-        // Capturar cualquier error y enviar una respuesta de error
         res.status(500).send({ message: "Internal Server Error" });
     }
 };
