@@ -1,6 +1,32 @@
 import {Request, Response} from "express"
 import prisma from "../db/client";
 
+export const getOneMovie = async (req: Request, res: Response) => {
+    const movieId = parseInt(req.params.movieId);
+    try {
+        const movie = await prisma.movies.findFirst({
+            where: { id: movieId },
+            include: {
+                genre: true
+            }
+
+        })
+        console.log("Movie found:", movie)
+        if(movie) {
+            return res.status(201).send( {
+                data: movie,
+                msg: "One movie"
+            })
+        } else {
+            return res.status(404).send("Movie not found")
+        }
+
+    } catch (error) {
+        console.error("Error getting movie:", error)
+        return res.status(500).send("Internal server error")
+    }
+}
+
 
 export const getAllMovies = async (req: Request, res: Response) => {
     try {
@@ -14,7 +40,6 @@ export const getAllMovies = async (req: Request, res: Response) => {
             }
         })
         
-
         res.status(200).send({
             type: "array",
             msg: "All movies",
@@ -27,12 +52,12 @@ export const getAllMovies = async (req: Request, res: Response) => {
 }
 
 export const createMovie = async (req: Request, res: Response) => {
-    const {name, image, score, genre} = req.body
+    const {name, image, score, genre, sinopsis} = req.body
     
     const userId = parseInt(req.params.userId)
 
-   if (!name || !image || !score) {
-    return res.status(400).send({message: "No name no image"})
+   if (!name || !image || !score || !genre || !sinopsis ) {
+    return res.status(400).send({message: "No name no image no score no genre no sinopsis"})
    }
 
    if (!userId) {
@@ -48,6 +73,7 @@ export const createMovie = async (req: Request, res: Response) => {
             image,
             score,
             userId,
+            sinopsis
         }
     })
     
@@ -83,10 +109,10 @@ export const createMovie = async (req: Request, res: Response) => {
 }
 
 export const updateMovie = async (req: Request, res: Response) => {
-    const { name, image, score, genre } = req.body;
+    const { name, image, score, genre, sinopsis } = req.body;
     const movieId = parseInt(req.params.movieId);
 
-    if (!name && !image && !score && !genre) {
+    if (!name && !image && !score && !genre && !sinopsis ) {
         return res.status(400).send({ message: "Falta información" });
     }
 
@@ -98,7 +124,7 @@ export const updateMovie = async (req: Request, res: Response) => {
         const movieUpdated = await prisma.$transaction(async (prisma) => {
             const updatedMovie = await prisma.movies.update({
                 where: { id: movieId },
-                data: { name, image, score },
+                data: { name, image, score, sinopsis },
                 include: {
                     genre: true
                 }

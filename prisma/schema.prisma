@@ -27,6 +27,7 @@ model Movies {
   userId   Int
   user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   genre    MovieGenre[]
+  sinopsis String
 }
 
 model Genres {
